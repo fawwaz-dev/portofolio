@@ -161,31 +161,63 @@ export default function HomePage() {
 
           {/* Enhanced Status Badge with Pulse Effect */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mb-8"
+            initial={{ opacity: 0, y: 20, scale: 0.8 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+            className="inline-flex items-center space-x-3 bg-cyber-gray/50 backdrop-blur-xl border border-neon-green/30 rounded-full px-6 py-3 mb-8 group hover:border-neon-green/50 transition-all duration-300"
+            style={{ boxShadow: "0 0 20px rgba(0, 255, 136, 0.2)" }}
+            whileHover={{
+              scale: 1.05,
+              boxShadow: "0 0 30px rgba(0, 255, 136, 0.4)",
+            }}
           >
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-cyber-gray/20 border border-neon-green/30 backdrop-blur-sm">
-              <div className="w-2 h-2 bg-neon-green rounded-full mr-3 animate-pulse" />
-              <span className="text-neon-green/90 font-mono text-sm tracking-wider">
-                AVAILABLE_FOR_WORK
-              </span>
-            </div>
+            <motion.div
+              className="w-2 h-2 bg-neon-green rounded-full"
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [1, 0.7, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "easeInOut",
+              }}
+            />
+            <span className="text-sm font-mono text-neon-green tracking-wider group-hover:text-neon-green/90 transition-colors">
+              SYSTEM_ONLINE
+            </span>
+            <div className="w-px h-4 bg-neon-green/30" />
+            <span className="text-xs text-electric-400 font-mono">v2.0.25</span>
           </motion.div>
 
-          {/* Enhanced Greeting */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="mb-4"
-          >
-            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light text-white/80 tracking-wide">
-              Hello, I'm{" "}
-              <span className="text-neon-green font-semibold">Fawwaz</span>
-            </h1>
-          </motion.div>
+          {/* Enhanced Main Title with Better Hierarchy */}
+          <div className="space-y-6 sm:space-y-8 mb-16">
+            {/* Role Badge with Enhanced Animation */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7, ease: "easeOut" }}
+              className="relative"
+            >
+              <motion.p
+                className="text-lg text-electric-400 font-mono tracking-wider uppercase inline-flex items-center space-x-2"
+                whileHover={{ scale: 1.02 }}
+              >
+                <span className="text-neon-green">&gt;</span>
+                <span>SOFTWARE_DEVELOPER</span>
+                <motion.span
+                  animate={{ opacity: [1, 0, 1] }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Number.POSITIVE_INFINITY,
+                  }}
+                  className="text-neon-green"
+                >
+                  _
+                </motion.span>
+              </motion.p>
+            </motion.div>
+          </div>
 
           {/* Enhanced Name with Interactive Text */}
           <motion.div
@@ -251,43 +283,67 @@ export default function HomePage() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.3, ease: "easeOut" }}
-            className="mt-8 max-w-3xl mx-auto"
+            transition={{ duration: 0.8, delay: 1.3, ease: "easeOut" }}
+            className="max-w-4xl mx-auto mb-12"
           >
-            <p className="text-base sm:text-lg md:text-xl text-white/70 leading-relaxed">
-              Full-stack developer crafting scalable applications with modern
-              technologies. Specializing in{" "}
+            <p className="text-lg sm:text-xl text-electric-300/80 leading-relaxed font-mono">
+              Full-stack developer building{" "}
               <span className="text-neon-green font-semibold">
-                Next.js, React, TypeScript
+                scalable apps
               </span>{" "}
-              and{" "}
+              using{" "}
+              <span className="text-electric-400 font-semibold">Next.js</span>,{" "}
+              <span className="text-neon-pink font-semibold">Laravel</span>,{" "}
+              <span className="text-electric-400 font-semibold">React</span>,{" "}
+              <span className="text-neon-green font-semibold">Vue</span>,{" "}
+              <span className="text-electric-400 font-semibold">Astro</span>,{" "}
+              <span className="text-neon-pink font-semibold">Tailwind CSS</span>
+              ,{" "}
               <span className="text-electric-400 font-semibold">
-                Laravel, Vue.js
+                Framer Motion
               </span>
-              . Building the future, one line of code at a time.
+              ,{" "}
+              <span className="text-neon-green font-semibold">TypeScript</span>,{" "}
+              <span className="text-electric-400 font-semibold">Node.js</span>,{" "}
+              <span className="text-neon-pink font-semibold">PostgreSQL</span>,
+              and <span className="text-electric-400 font-semibold">MySQL</span>
+              .
             </p>
           </motion.div>
 
-          {/* Enhanced CTA Buttons */}
+          {/* Enhanced CTA Buttons with Staggered Animation */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.5, ease: "easeOut" }}
-            className="mt-12 flex flex-col sm:flex-row gap-6 justify-center items-center"
+            transition={{ duration: 0.8, delay: 1.5, ease: "easeOut" }}
+            className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center"
           >
-            <CyberButton
-              href="/projects"
-              className="px-8 py-4 text-lg font-semibold tracking-wider"
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 1.7 }}
             >
-              VIEW_PROJECTS
-            </CyberButton>
-            <CyberButton
-              href="/contact"
-              variant="secondary"
-              className="px-8 py-4 text-lg font-semibold tracking-wider"
+              <CyberButton variant="primary" size="md" href="/projects">
+                <Zap className="w-5 h-5 sm:w-6 sm:h-6" />
+                <span className="font-mono text-sm sm:text-base md:text-lg">
+                  VIEW_PROJECTS
+                </span>
+                <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform duration-300" />
+              </CyberButton>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 1.9 }}
             >
-              GET_IN_TOUCH
-            </CyberButton>
+              <CyberButton variant="secondary" size="md" href="/contact">
+                <Play className="w-5 h-5 sm:w-6 sm:h-6" />
+                <span className="font-mono text-sm sm:text-base md:text-lg">
+                  GET_IN_TOUCH
+                </span>
+              </CyberButton>
+            </motion.div>
           </motion.div>
 
           {/* Enhanced Stats Grid */}
@@ -322,6 +378,44 @@ export default function HomePage() {
                 </div>
               </motion.div>
             ))}
+          </motion.div>
+
+          {/* Scroll Indicator */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 2.2 }}
+            className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20"
+          >
+            <motion.div
+              animate={{ y: [0, 10, 0] }}
+              transition={{
+                duration: 2,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "easeInOut",
+              }}
+              className="flex flex-col items-center text-electric-400/60 hover:text-electric-400 transition-colors cursor-pointer"
+              onClick={() => {
+                document
+                  .getElementById("about")
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
+              <span className="text-xs font-mono tracking-wider">
+                SCROLL_DOWN
+              </span>
+              <motion.div
+                animate={{ y: [0, 10, 0] }}
+                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+                className="w-6 h-10 border-2 border-white/40 rounded-full flex justify-center cursor-pointer hover:border-white/60 transition-colors"
+              >
+                <motion.div
+                  animate={{ y: [0, 12, 0] }}
+                  transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+                  className="w-1 h-3 bg-white/60 rounded-full mt-2"
+                />
+              </motion.div>
+            </motion.div>
           </motion.div>
         </motion.div>
       </section>
