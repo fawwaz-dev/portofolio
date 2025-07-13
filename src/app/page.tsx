@@ -1,9 +1,8 @@
 "use client";
 
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useState } from "react";
 import { ArrowRight, Play, Zap } from "lucide-react";
-import Scene3D from "@/components/3D/Scene3D";
 import InteractiveText from "@/components/ui/InteractiveText";
 import { getProjects } from "@/lib/supabase";
 import AboutSection from "@/components/AboutSection";
@@ -27,24 +26,8 @@ export default function HomePage() {
   const opacity = useTransform(smoothProgress, [0, 0.5], [1, 0]);
   const scale = useTransform(smoothProgress, [0, 0.5], [1, 0.8]);
 
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLowPerformance, setIsLowPerformance] = useState(false);
-
-  // Throttle function for performance
-  const throttle = useCallback(
-    (func: (e: MouseEvent) => void, limit: number) => {
-      let inThrottle: boolean;
-      return function (e: MouseEvent) {
-        if (!inThrottle) {
-          func(e);
-          inThrottle = true;
-          setTimeout(() => (inThrottle = false), limit);
-        }
-      };
-    },
-    []
-  );
 
   useEffect(() => {
     // Check device performance capabilities
@@ -76,21 +59,6 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    // Skip mouse tracking on low-performance devices
-    if (isLowPerformance || typeof window === "undefined") return;
-
-    const throttledMouseMove = throttle((e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 2 - 1,
-        y: (e.clientY / window.innerHeight) * 2 - 1,
-      });
-    }, 32); // ~30fps for better performance
-
-    window.addEventListener("mousemove", throttledMouseMove);
-    return () => window.removeEventListener("mousemove", throttledMouseMove);
-  }, [isLowPerformance, throttle]);
-
-  useEffect(() => {
     async function fetchProjects() {
       try {
         await getProjects();
@@ -106,9 +74,6 @@ export default function HomePage() {
     <div ref={containerRef} className="relative">
       {/* Hero Section - Cyberpunk Style */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-cyber-dark">
-        {/* 3D Background */}
-        <Scene3D mousePosition={mousePosition} />
-
         {/* Cyber Grid Overlay */}
         <div className="absolute inset-0 bg-cyber-grid bg-grid opacity-20" />
 

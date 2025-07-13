@@ -272,7 +272,7 @@ src/
 
 ### 1. **Advanced Interactions**
 
-- 3D tilt effects on cards
+- Hover tilt effects on cards
 - Parallax scrolling effects
 - Custom cursor animations
 - Sound effects for interactions

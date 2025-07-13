@@ -6,7 +6,7 @@
 
 - **Problem**: Multiple complex 3D components running simultaneously
 - **Impact**: High GPU usage, especially on mobile devices
-- **Solution**: Conditional rendering based on device capabilities
+- **Solution**: Removed unused 3D components to improve performance
 
 ### **2. Excessive Mouse Event Listeners**
 
@@ -34,34 +34,21 @@
 
 ## 🔧 **Implemented Optimizations**
 
-### **1. Scene3D Component Optimization**
+### **1. 3D Components Removal**
 
 ```typescript
-// Performance-based conditional rendering
-const [isLowPerformance, setIsLowPerformance] = useState(false);
+// Removed unused 3D components:
+// - Scene3D.tsx
+// - AnimatedShapes.tsx
+// - FloatingElements.tsx
+// - InteractiveGlobe.tsx
+// - ParticleSystem.tsx
 
-// Check device capabilities
-const checkPerformance = () => {
-  const isMobile = window.innerWidth < 768;
-  const isLowEnd = navigator.hardwareConcurrency <= 4;
-  const hasReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
-
-  setIsLowPerformance(isMobile || isLowEnd || hasReducedMotion);
-};
-
-// Conditional 3D elements
-{
-  !isLowPerformance && (
-    <>
-      <FloatingElements mousePosition={mousePosition} />
-      <InteractiveGlobe mousePosition={mousePosition} />
-      <AnimatedShapes />
-      <ParticleSystem />
-    </>
-  );
-}
+// Also removed dependencies:
+// - @react-three/drei
+// - @react-three/fiber
+// - three
+// - @types/three
 ```
 
 ### **2. Mouse Event Throttling**
@@ -308,7 +295,7 @@ if ("getBattery" in navigator) {
 
 ### **Immediate Actions**
 
-1. **Disable 3D on mobile**: Already implemented
+1. **Remove unused 3D components**: Completed
 2. **Throttle mouse events**: Already implemented
 3. **Reduce animation complexity**: Already implemented
 4. **Optimize images**: Use WebP format
