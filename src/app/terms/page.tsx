@@ -60,7 +60,7 @@ export default function TermsPage() {
 
             <InteractiveText
               text="TERMS_OF_SERVICE"
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-6 sm:mb-8"
+              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-6 sm:mb-8 px-2 break-words"
               colors={["#22d3ee", "#00ff88", "#ff0080", "#8b5cf6"]}
             />
 
@@ -88,9 +88,9 @@ export default function TermsPage() {
           >
             {/* Acceptance */}
             <motion.div variants={itemVariants} className="space-y-6">
-              <div className="flex items-center space-x-3 mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mb-6">
                 <Shield className="w-6 h-6 text-electric-400" />
-                <h2 className="text-2xl sm:text-3xl font-bold text-electric-400 font-mono">
+                <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-electric-400 font-mono break-words">
                   ACCEPTANCE_OF_TERMS
                 </h2>
               </div>
@@ -107,9 +107,9 @@ export default function TermsPage() {
 
             {/* Usage Rules */}
             <motion.div variants={itemVariants} className="space-y-6">
-              <div className="flex items-center space-x-3 mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mb-6">
                 <Users className="w-6 h-6 text-electric-400" />
-                <h2 className="text-2xl sm:text-3xl font-bold text-electric-400 font-mono">
+                <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-electric-400 font-mono break-words">
                   USAGE_RULES
                 </h2>
               </div>
@@ -165,9 +165,9 @@ export default function TermsPage() {
 
             {/* Intellectual Property */}
             <motion.div variants={itemVariants} className="space-y-6">
-              <div className="flex items-center space-x-3 mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mb-6">
                 <Copyright className="w-6 h-6 text-electric-400" />
-                <h2 className="text-2xl sm:text-3xl font-bold text-electric-400 font-mono">
+                <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-electric-400 font-mono break-words">
                   INTELLECTUAL_PROPERTY
                 </h2>
               </div>
@@ -197,9 +197,9 @@ export default function TermsPage() {
 
             {/* Limitations */}
             <motion.div variants={itemVariants} className="space-y-6">
-              <div className="flex items-center space-x-3 mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mb-6">
                 <AlertTriangle className="w-6 h-6 text-electric-400" />
-                <h2 className="text-2xl sm:text-3xl font-bold text-electric-400 font-mono">
+                <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-electric-400 font-mono break-words">
                   LIMITATIONS_OF_LIABILITY
                 </h2>
               </div>
@@ -242,9 +242,9 @@ export default function TermsPage() {
 
             {/* User Responsibility */}
             <motion.div variants={itemVariants} className="space-y-6">
-              <div className="flex items-center space-x-3 mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mb-6">
                 <Users className="w-6 h-6 text-electric-400" />
-                <h2 className="text-2xl sm:text-3xl font-bold text-electric-400 font-mono">
+                <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-electric-400 font-mono break-words">
                   USER_RESPONSIBILITY
                 </h2>
               </div>
@@ -278,9 +278,9 @@ export default function TermsPage() {
 
             {/* Modifications */}
             <motion.div variants={itemVariants} className="space-y-6">
-              <div className="flex items-center space-x-3 mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mb-6">
                 <Settings className="w-6 h-6 text-electric-400" />
-                <h2 className="text-2xl sm:text-3xl font-bold text-electric-400 font-mono">
+                <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-electric-400 font-mono break-words">
                   MODIFICATIONS_&_TERMINATION
                 </h2>
               </div>
@@ -309,9 +309,9 @@ export default function TermsPage() {
 
             {/* Contact */}
             <motion.div variants={itemVariants} className="space-y-6">
-              <div className="flex items-center space-x-3 mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mb-6">
                 <Shield className="w-6 h-6 text-electric-400" />
-                <h2 className="text-2xl sm:text-3xl font-bold text-electric-400 font-mono">
+                <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-electric-400 font-mono break-words">
                   CONTACT_INFORMATION
                 </h2>
               </div>
