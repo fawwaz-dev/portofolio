@@ -112,23 +112,6 @@ const nextConfig: NextConfig = {
       "react-dom": "react-dom",
     };
 
-    // Optimize CSS
-    if (!dev) {
-      config.optimization.minimizer?.push(
-        new (require("css-minimizer-webpack-plugin"))({
-          minimizerOptions: {
-            preset: [
-              "default",
-              {
-                discardComments: { removeAll: true },
-                normalizeWhitespace: true,
-              },
-            ],
-          },
-        })
-      );
-    }
-
     return config;
   },
   // Performance optimizations
