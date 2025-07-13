@@ -14,7 +14,7 @@ export default function ScrollProgress() {
     <>
       {/* Top Progress Bar - Enhanced Cyberpunk Style */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-neon-green via-electric-400 to-neon-pink transform-gpu z-50"
+        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-neon-green via-electric-400 to-neon-pink transform-gpu z-[999]"
         style={{
           scaleX,
           transformOrigin: "0%",

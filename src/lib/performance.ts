@@ -67,7 +67,8 @@ export class PerformanceMonitor {
       fps: this.fps,
       frameTime: this.frameTime,
       isLowPerformance: this.isLowPerformance,
-      memoryUsage: (performance as any).memory?.usedJSHeapSize,
+      memoryUsage: (performance as { memory?: { usedJSHeapSize: number } })
+        .memory?.usedJSHeapSize,
       cpuUsage: navigator.hardwareConcurrency,
     };
   }
@@ -78,12 +79,12 @@ export class PerformanceMonitor {
 }
 
 // Throttle function for performance optimization
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: unknown[]) => void>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
   let inThrottle: boolean;
-  return function (this: any, ...args: Parameters<T>) {
+  return function (this: unknown, ...args: Parameters<T>) {
     if (!inThrottle) {
       func.apply(this, args);
       inThrottle = true;
@@ -93,12 +94,12 @@ export function throttle<T extends (...args: any[]) => any>(
 }
 
 // Debounce function for performance optimization
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => void>(
   func: T,
   delay: number
 ): (...args: Parameters<T>) => void {
   let timeoutId: NodeJS.Timeout;
-  return function (this: any, ...args: Parameters<T>) {
+  return function (this: unknown, ...args: Parameters<T>) {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => func.apply(this, args), delay);
   };

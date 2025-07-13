@@ -32,16 +32,19 @@ export default function CursorFollower() {
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   // Throttle function for performance
-  const throttle = useCallback((func: Function, limit: number) => {
-    let inThrottle: boolean;
-    return function (this: any, ...args: any[]) {
-      if (!inThrottle) {
-        func.apply(this, args);
-        inThrottle = true;
-        setTimeout(() => (inThrottle = false), limit);
-      }
-    };
-  }, []);
+  const throttle = useCallback(
+    (func: (e: MouseEvent) => void, limit: number) => {
+      let inThrottle: boolean;
+      return function (e: MouseEvent) {
+        if (!inThrottle) {
+          func(e);
+          inThrottle = true;
+          setTimeout(() => (inThrottle = false), limit);
+        }
+      };
+    },
+    []
+  );
 
   useEffect(() => {
     // Check device capabilities - More lenient for cursor
