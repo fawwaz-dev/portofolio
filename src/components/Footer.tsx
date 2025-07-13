@@ -231,7 +231,7 @@ export default function Footer() {
               </div>
             </div>
 
-            <div className="flex items-center space-x-6 text-sm">
+            <div className="flex justify-center sm:justify-start items-center space-x-6 text-sm">
               <Link
                 href="/privacy"
                 className="text-white/60 hover:text-neon-green transition-colors duration-300 font-mono"
