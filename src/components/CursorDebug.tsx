@@ -13,6 +13,9 @@ export default function CursorDebug() {
 
   useEffect(() => {
     const updateDebugInfo = () => {
+      // Ensure we're on the client side
+      if (typeof window === "undefined") return;
+
       setDebugInfo({
         windowWidth: window.innerWidth,
         hardwareConcurrency: navigator.hardwareConcurrency,
@@ -23,10 +26,13 @@ export default function CursorDebug() {
       });
     };
 
-    updateDebugInfo();
-    window.addEventListener("resize", updateDebugInfo);
+    // Only run on client side
+    if (typeof window !== "undefined") {
+      updateDebugInfo();
+      window.addEventListener("resize", updateDebugInfo);
 
-    return () => window.removeEventListener("resize", updateDebugInfo);
+      return () => window.removeEventListener("resize", updateDebugInfo);
+    }
   }, []);
 
   if (process.env.NODE_ENV !== "development") return null;

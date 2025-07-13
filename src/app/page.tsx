@@ -49,6 +49,9 @@ export default function HomePage() {
   useEffect(() => {
     // Check device performance capabilities
     const checkPerformance = () => {
+      // Ensure we're on the client side
+      if (typeof window === "undefined") return;
+
       const isMobile = window.innerWidth < 768;
       const isLowEnd = navigator.hardwareConcurrency <= 4;
       const hasReducedMotion = window.matchMedia(
@@ -58,10 +61,13 @@ export default function HomePage() {
       setIsLowPerformance(isMobile || isLowEnd || hasReducedMotion);
     };
 
-    checkPerformance();
-    window.addEventListener("resize", checkPerformance);
+    // Only run on client side
+    if (typeof window !== "undefined") {
+      checkPerformance();
+      window.addEventListener("resize", checkPerformance);
 
-    return () => window.removeEventListener("resize", checkPerformance);
+      return () => window.removeEventListener("resize", checkPerformance);
+    }
   }, []);
 
   useEffect(() => {
@@ -71,7 +77,7 @@ export default function HomePage() {
 
   useEffect(() => {
     // Skip mouse tracking on low-performance devices
-    if (isLowPerformance) return;
+    if (isLowPerformance || typeof window === "undefined") return;
 
     const throttledMouseMove = throttle((e: MouseEvent) => {
       setMousePosition({

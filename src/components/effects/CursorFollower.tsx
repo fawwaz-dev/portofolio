@@ -49,6 +49,9 @@ export default function CursorFollower() {
   useEffect(() => {
     // Check device capabilities - More lenient for cursor
     const checkDevice = () => {
+      // Ensure we're on the client side
+      if (typeof window === "undefined") return;
+
       const isMobileDevice = window.innerWidth < 768; // Only disable on actual mobile
       const isLowEnd = navigator.hardwareConcurrency <= 2; // More lenient threshold
       const hasReducedMotion = window.matchMedia(
@@ -59,15 +62,18 @@ export default function CursorFollower() {
       setIsLowPerformance(isLowEnd || hasReducedMotion);
     };
 
-    checkDevice();
-    window.addEventListener("resize", checkDevice);
+    // Only run on client side
+    if (typeof window !== "undefined") {
+      checkDevice();
+      window.addEventListener("resize", checkDevice);
 
-    return () => window.removeEventListener("resize", checkDevice);
+      return () => window.removeEventListener("resize", checkDevice);
+    }
   }, []);
 
   useEffect(() => {
     // Only disable cursor on actual mobile devices (touch-only)
-    if (isMobile) return;
+    if (isMobile || typeof window === "undefined") return;
 
     const throttledMoveCursor = throttle((e: MouseEvent) => {
       cursorX.set(e.clientX - 16);
