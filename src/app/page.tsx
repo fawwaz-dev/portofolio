@@ -161,227 +161,167 @@ export default function HomePage() {
 
           {/* Enhanced Status Badge with Pulse Effect */}
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.8 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-            className="inline-flex items-center space-x-3 bg-cyber-gray/50 backdrop-blur-xl border border-neon-green/30 rounded-full px-6 py-3 mb-8 group hover:border-neon-green/50 transition-all duration-300"
-            style={{ boxShadow: "0 0 20px rgba(0, 255, 136, 0.2)" }}
-            whileHover={{
-              scale: 1.05,
-              boxShadow: "0 0 30px rgba(0, 255, 136, 0.4)",
-            }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="mb-8"
           >
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-cyber-gray/20 border border-neon-green/30 backdrop-blur-sm">
+              <div className="w-2 h-2 bg-neon-green rounded-full mr-3 animate-pulse" />
+              <span className="text-neon-green/90 font-mono text-sm tracking-wider">
+                AVAILABLE_FOR_WORK
+              </span>
+            </div>
+          </motion.div>
+
+          {/* Enhanced Greeting */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="mb-4"
+          >
+            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light text-white/80 tracking-wide">
+              Hello, I'm{" "}
+              <span className="text-neon-green font-semibold">Fawwaz</span>
+            </h1>
+          </motion.div>
+
+          {/* Enhanced Name with Interactive Text */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2, delay: 0.9, ease: "easeOut" }}
+            className="relative"
+          >
+            <InteractiveText
+              text="FAWWAZ"
+              className="text-4xl sm:text-6xl md:text-8xl lg:text-[10rem] font-black tracking-tighter leading-none"
+              colors={["#ffffff", "#00ff88", "#00d4ff", "#ff0080"]}
+            />
+            {/* Enhanced Glow Effect */}
             <motion.div
-              className="w-2 h-2 bg-neon-green rounded-full"
+              className="absolute inset-0 bg-gradient-to-r from-neon-green/20 via-electric-400/20 to-neon-pink/20 blur-3xl rounded-full"
               animate={{
-                scale: [1, 1.2, 1],
-                opacity: [1, 0.7, 1],
+                scale: [1, 1.1, 1],
+                opacity: [0.3, 0.5, 0.3],
               }}
               transition={{
-                duration: 2,
+                duration: 4,
                 repeat: Number.POSITIVE_INFINITY,
                 ease: "easeInOut",
               }}
             />
-            <span className="text-sm font-mono text-neon-green tracking-wider group-hover:text-neon-green/90 transition-colors">
-              SYSTEM_ONLINE
-            </span>
-            <div className="w-px h-4 bg-neon-green/30" />
-            <span className="text-xs text-electric-400 font-mono">v2.0.25</span>
           </motion.div>
 
-          {/* Enhanced Main Title with Better Hierarchy */}
-          <div className="space-y-6 sm:space-y-8 mb-16">
-            {/* Role Badge with Enhanced Animation */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.7, ease: "easeOut" }}
-              className="relative"
-            >
-              <motion.p
-                className="text-lg text-electric-400 font-mono tracking-wider uppercase inline-flex items-center space-x-2"
-                whileHover={{ scale: 1.02 }}
-              >
-                <span className="text-neon-green">&gt;</span>
-                <span>SOFTWARE_DEVELOPER</span>
-                <motion.span
-                  animate={{ opacity: [1, 0, 1] }}
-                  transition={{
-                    duration: 1.5,
-                    repeat: Number.POSITIVE_INFINITY,
-                  }}
-                  className="text-neon-green"
+          {/* Enhanced Tagline with Better Typography */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 1.1, ease: "easeOut" }}
+            className="relative max-w-4xl mx-auto"
+          >
+            <h2 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-light text-white/90 tracking-wide leading-relaxed">
+              Crafting{" "}
+              <span className="relative inline-block font-mono">
+                <span
+                  className="bg-gradient-to-r from-neon-green via-electric-400 to-neon-blue bg-clip-text text-transparent font-bold animate-neon-flicker"
+                  style={{ textShadow: "0 0 10px currentColor" }}
                 >
-                  _
-                </motion.span>
-              </motion.p>
-            </motion.div>
-
-            {/* Enhanced Interactive Name with Glow Effect */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1.2, delay: 0.9, ease: "easeOut" }}
-              className="relative"
-            >
-              <InteractiveText
-                text="FAWWAZ"
-                className="text-4xl sm:text-6xl md:text-8xl lg:text-[10rem] font-black tracking-tighter leading-none"
-                colors={["#ffffff", "#00ff88", "#00d4ff", "#ff0080"]}
-              />
-              {/* Enhanced Glow Effect */}
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-neon-green/20 via-electric-400/20 to-neon-pink/20 blur-3xl rounded-full"
-                animate={{
-                  scale: [1, 1.1, 1],
-                  opacity: [0.3, 0.5, 0.3],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Number.POSITIVE_INFINITY,
-                  ease: "easeInOut",
-                }}
-              />
-            </motion.div>
-
-            {/* Enhanced Tagline with Better Typography */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 1.1, ease: "easeOut" }}
-              className="relative max-w-4xl mx-auto"
-            >
-              <h2 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-light text-white/90 tracking-wide leading-relaxed">
-                Crafting{" "}
-                <span className="relative inline-block font-mono">
-                  <span
-                    className="bg-gradient-to-r from-neon-green via-electric-400 to-neon-blue bg-clip-text text-transparent font-bold animate-neon-flicker"
-                    style={{ textShadow: "0 0 10px currentColor" }}
-                  >
-                    DIGITAL_REALITIES
-                  </span>
-                  <motion.div
-                    className="absolute -inset-2 bg-neon-green/20 blur-xl rounded-full"
-                    animate={{
-                      scale: [1, 1.2, 1],
-                      opacity: [0.3, 0.6, 0.3],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "easeInOut",
-                    }}
-                  />
-                </span>{" "}
-                for the future
-              </h2>
-            </motion.div>
-          </div>
+                  DIGITAL_REALITIES
+                </span>
+                <motion.div
+                  className="absolute -inset-2 bg-neon-green/20 blur-xl rounded-full"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.3, 0.6, 0.3],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                  }}
+                />
+              </span>{" "}
+              for the future
+            </h2>
+          </motion.div>
 
           {/* Enhanced Description with Better Layout */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.3, ease: "easeOut" }}
-            className="max-w-4xl mx-auto mb-12"
+            transition={{ duration: 1, delay: 1.3, ease: "easeOut" }}
+            className="mt-8 max-w-3xl mx-auto"
           >
-            <p className="text-lg sm:text-xl text-electric-300/80 leading-relaxed font-mono">
-              Full-stack developer building{" "}
+            <p className="text-base sm:text-lg md:text-xl text-white/70 leading-relaxed">
+              Full-stack developer crafting scalable applications with modern
+              technologies. Specializing in{" "}
               <span className="text-neon-green font-semibold">
-                scalable apps
+                Next.js, React, TypeScript
               </span>{" "}
-              using{" "}
-              <span className="text-electric-400 font-semibold">Next.js</span>,{" "}
-              <span className="text-neon-pink font-semibold">Laravel</span>,{" "}
-              <span className="text-electric-400 font-semibold">React</span>,{" "}
-              <span className="text-neon-green font-semibold">Vue</span>,{" "}
-              <span className="text-electric-400 font-semibold">Astro</span>,{" "}
-              <span className="text-neon-pink font-semibold">Tailwind CSS</span>
-              ,{" "}
+              and{" "}
               <span className="text-electric-400 font-semibold">
-                Framer Motion
+                Laravel, Vue.js
               </span>
-              ,{" "}
-              <span className="text-neon-green font-semibold">TypeScript</span>,{" "}
-              <span className="text-electric-400 font-semibold">Node.js</span>,{" "}
-              <span className="text-neon-pink font-semibold">PostgreSQL</span>,
-              and <span className="text-electric-400 font-semibold">MySQL</span>
-              .
+              . Building the future, one line of code at a time.
             </p>
           </motion.div>
 
-          {/* Enhanced CTA Buttons with Staggered Animation */}
+          {/* Enhanced CTA Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.5, ease: "easeOut" }}
-            className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center"
+            transition={{ duration: 1, delay: 1.5, ease: "easeOut" }}
+            className="mt-12 flex flex-col sm:flex-row gap-6 justify-center items-center"
           >
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 1.7 }}
+            <CyberButton
+              href="/projects"
+              className="px-8 py-4 text-lg font-semibold tracking-wider"
             >
-              <CyberButton variant="primary" size="md" href="/projects">
-                <Zap className="w-5 h-5 sm:w-6 sm:h-6" />
-                <span className="font-mono text-sm sm:text-base md:text-lg">
-                  VIEW_PROJECTS
-                </span>
-                <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform duration-300" />
-              </CyberButton>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 1.9 }}
+              VIEW_PROJECTS
+            </CyberButton>
+            <CyberButton
+              href="/contact"
+              variant="secondary"
+              className="px-8 py-4 text-lg font-semibold tracking-wider"
             >
-              <CyberButton variant="secondary" size="md" href="/contact">
-                <Play className="w-5 h-5 sm:w-6 sm:h-6" />
-                <span className="font-mono text-sm sm:text-base md:text-lg">
-                  GET_IN_TOUCH
-                </span>
-              </CyberButton>
-            </motion.div>
+              GET_IN_TOUCH
+            </CyberButton>
           </motion.div>
-        </motion.div>
 
-        {/* Scroll Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 2.2 }}
-          className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20"
-        >
+          {/* Enhanced Stats Grid */}
           <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{
-              duration: 2,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
-            }}
-            className="flex flex-col items-center text-electric-400/60 hover:text-electric-400 transition-colors cursor-pointer"
-            onClick={() => {
-              document
-                .getElementById("about")
-                ?.scrollIntoView({ behavior: "smooth" });
-            }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 1.7, ease: "easeOut" }}
+            className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
           >
-            <span className="text-xs font-mono tracking-wider">
-              SCROLL_DOWN
-            </span>
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-              className="w-6 h-10 border-2 border-white/40 rounded-full flex justify-center cursor-pointer hover:border-white/60 transition-colors"
-            >
+            {[
+              { label: "YEARS_EXPERIENCE", value: "3+" },
+              { label: "PROJECTS_COMPLETED", value: "50+" },
+              { label: "TECHNOLOGIES", value: "15+" },
+              { label: "HAPPY_CLIENTS", value: "25+" },
+            ].map((stat, index) => (
               <motion.div
-                animate={{ y: [0, 12, 0] }}
-                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-                className="w-1 h-3 bg-white/60 rounded-full mt-2"
-              />
-            </motion.div>
+                key={index}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  duration: 0.6,
+                  delay: 1.9 + index * 0.1,
+                  ease: "easeOut",
+                }}
+                className="text-center"
+              >
+                <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-neon-green mb-2">
+                  {stat.value}
+                </div>
+                <div className="text-sm md:text-base text-white/60 font-mono tracking-wider">
+                  {stat.label}
+                </div>
+              </motion.div>
+            ))}
           </motion.div>
         </motion.div>
       </section>

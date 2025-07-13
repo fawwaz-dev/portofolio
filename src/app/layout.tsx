@@ -120,23 +120,23 @@ export default function RootLayout({
         >
           <SmoothScroll>
             <div className="relative min-h-screen bg-gradient-to-br from-cyber-dark via-cyber-darker to-cyber-dark">
-              {/* Global Effects */}
+              {/* Global Effects - Conditional based on performance */}
               <CursorFollower />
               <ScrollProgress />
               <CyberGrid />
-              <CursorDebug />
+              {process.env.NODE_ENV === "development" && <CursorDebug />}
 
-              {/* Cyberpunk Animated Background */}
+              {/* Cyberpunk Animated Background - Optimized */}
               <div className="fixed inset-0 overflow-hidden pointer-events-none">
                 {/* Cyber Grid */}
                 <div className="absolute inset-0 bg-cyber-grid bg-grid opacity-10" />
 
-                {/* Floating Neon Orbs */}
+                {/* Floating Neon Orbs - Reduced complexity */}
                 <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-neon-green/5 rounded-full blur-3xl animate-float" />
                 <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-electric-400/5 rounded-full blur-3xl animate-float-delayed" />
                 <div className="absolute top-3/4 left-3/4 w-64 h-64 bg-neon-blue/5 rounded-full blur-2xl animate-bounce-slow" />
 
-                {/* Scanning Lines */}
+                {/* Scanning Lines - Conditional */}
                 <div className="absolute inset-0">
                   <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-neon-green/30 to-transparent animate-cyber-scan" />
                 </div>

@@ -19,6 +19,15 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizePackageImports: ["framer-motion", "lucide-react"],
+    // Enable modern JavaScript features
+    turbo: {
+      rules: {
+        "*.svg": {
+          loaders: ["@svgr/webpack"],
+          as: "*.js",
+        },
+      },
+    },
   },
   compress: true,
   poweredByHeader: false,
@@ -75,6 +84,13 @@ const nextConfig: NextConfig = {
             chunks: "all",
             priority: 30,
           },
+          // Separate Next.js for better caching
+          next: {
+            test: /[\\/]node_modules[\\/]next[\\/]/,
+            name: "next",
+            chunks: "all",
+            priority: 25,
+          },
         },
       };
 
@@ -84,6 +100,9 @@ const nextConfig: NextConfig = {
       // Remove unused code
       config.optimization.usedExports = true;
       config.optimization.sideEffects = false;
+
+      // Enable tree shaking
+      config.optimization.providedExports = true;
     }
 
     // Optimize for modern browsers
@@ -93,8 +112,29 @@ const nextConfig: NextConfig = {
       "react-dom": "react-dom",
     };
 
+    // Optimize CSS
+    if (!dev) {
+      config.optimization.minimizer?.push(
+        new (require("css-minimizer-webpack-plugin"))({
+          minimizerOptions: {
+            preset: [
+              "default",
+              {
+                discardComments: { removeAll: true },
+                normalizeWhitespace: true,
+              },
+            ],
+          },
+        })
+      );
+    }
+
     return config;
   },
+  // Performance optimizations
+  swcMinify: true,
+  // Enable modern JavaScript features
+  transpilePackages: ["framer-motion"],
 };
 
 export default nextConfig;

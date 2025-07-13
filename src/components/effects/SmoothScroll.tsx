@@ -1,46 +1,57 @@
 "use client";
 
-import type React from "react";
-import { useEffect, useState } from "react";
-
-interface SmoothScrollProps {
-  children: React.ReactNode;
-}
+import { useEffect, useState, useCallback } from "react";
 
 interface LenisInstance {
   raf: (time: number) => void;
   destroy: () => void;
 }
 
+interface SmoothScrollProps {
+  children: React.ReactNode;
+}
+
 export default function SmoothScroll({ children }: SmoothScrollProps) {
   const [isLowPerformance, setIsLowPerformance] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  useEffect(() => {
-    // Check device performance capabilities
-    const checkPerformance = () => {
-      const isMobile = window.innerWidth < 768;
-      const isLowEnd = navigator.hardwareConcurrency <= 4;
-      const hasReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
+  // Optimize performance check with useCallback
+  const checkPerformance = useCallback(() => {
+    if (typeof window === "undefined") return;
 
-      setIsLowPerformance(isMobile || isLowEnd || hasReducedMotion);
-    };
+    const isMobile = window.innerWidth < 768;
+    const isLowEnd = navigator.hardwareConcurrency <= 4;
+    const hasReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
 
-    checkPerformance();
-    window.addEventListener("resize", checkPerformance);
-
-    return () => window.removeEventListener("resize", checkPerformance);
+    setIsLowPerformance(isMobile || isLowEnd || hasReducedMotion);
   }, []);
 
   useEffect(() => {
+    // Defer performance check to avoid blocking initial render
+    const timer = setTimeout(() => {
+      checkPerformance();
+      setIsInitialized(true);
+    }, 100);
+
+    window.addEventListener("resize", checkPerformance);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", checkPerformance);
+    };
+  }, [checkPerformance]);
+
+  useEffect(() => {
     // Skip smooth scrolling on low-performance devices
-    if (isLowPerformance) return;
+    if (isLowPerformance || !isInitialized) return;
 
     let lenis: LenisInstance | null = null;
 
     const initLenis = async () => {
       try {
+        // Dynamic import to reduce initial bundle size
         const Lenis = (await import("lenis")).default;
 
         lenis = new Lenis({
@@ -50,6 +61,10 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
           wheelMultiplier: 1,
           touchMultiplier: 2,
           infinite: false,
+          // Performance optimizations
+          lerp: 0.1,
+          syncTouch: true,
+          syncTouchLerp: 0.1,
         }) as LenisInstance;
 
         function raf(time: number) {
@@ -63,14 +78,16 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
       }
     };
 
-    initLenis();
+    // Defer initialization to avoid blocking initial render
+    const timer = setTimeout(initLenis, 200);
 
     return () => {
+      clearTimeout(timer);
       if (lenis) {
         lenis.destroy();
       }
     };
-  }, [isLowPerformance]);
+  }, [isLowPerformance, isInitialized]);
 
   return <>{children}</>;
 }
