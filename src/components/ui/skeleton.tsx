@@ -7,9 +7,10 @@ import { cn } from "@/lib/utils";
 interface SkeletonProps {
   className?: string;
   children?: React.ReactNode;
+  style?: React.CSSProperties;
 }
 
-export function Skeleton({ className, children }: SkeletonProps) {
+export function Skeleton({ className, children, style }: SkeletonProps) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -19,6 +20,7 @@ export function Skeleton({ className, children }: SkeletonProps) {
         "relative overflow-hidden bg-cyber-gray/30 backdrop-blur-sm border border-electric-400/20 rounded-lg",
         className
       )}
+      style={style}
     >
       {/* Shimmer Effect */}
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-neon-green/20 to-transparent animate-shimmer" />
@@ -256,8 +258,8 @@ interface SkeletonGridProps {
   className?: string;
   items?: number;
   columns?: number;
-  itemComponent?: React.ComponentType<any>;
-  itemProps?: any;
+  itemComponent?: React.ComponentType<Record<string, unknown>>;
+  itemProps?: Record<string, unknown>;
 }
 
 export function SkeletonGrid({

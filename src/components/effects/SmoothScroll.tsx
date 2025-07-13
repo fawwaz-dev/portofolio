@@ -1,19 +1,24 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useEffect } from "react"
+import { useEffect } from "react";
 
 interface SmoothScrollProps {
-  children: React.ReactNode
+  children: React.ReactNode;
+}
+
+interface LenisInstance {
+  raf: (time: number) => void;
+  destroy: () => void;
 }
 
 export default function SmoothScroll({ children }: SmoothScrollProps) {
   useEffect(() => {
-    let lenis: any
+    let lenis: LenisInstance | null = null;
 
     const initLenis = async () => {
-      const Lenis = (await import("lenis")).default
+      const Lenis = (await import("lenis")).default;
 
       lenis = new Lenis({
         duration: 1.2,
@@ -21,24 +26,24 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
         smoothWheel: true,
         wheelMultiplier: 1,
         touchMultiplier: 2,
-      })
+      }) as LenisInstance;
 
       function raf(time: number) {
-        lenis.raf(time)
-        requestAnimationFrame(raf)
+        lenis?.raf(time);
+        requestAnimationFrame(raf);
       }
 
-      requestAnimationFrame(raf)
-    }
+      requestAnimationFrame(raf);
+    };
 
-    initLenis()
+    initLenis();
 
     return () => {
       if (lenis) {
-        lenis.destroy()
+        lenis.destroy();
       }
-    }
-  }, [])
+    };
+  }, []);
 
-  return <>{children}</>
+  return <>{children}</>;
 }

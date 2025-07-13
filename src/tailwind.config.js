@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
@@ -100,11 +101,13 @@ module.exports = {
       keyframes: {
         "glow-pulse": {
           "0%": {
-            boxShadow: "0 0 5px var(--glow-color), 0 0 10px var(--glow-color), 0 0 15px var(--glow-color)",
+            boxShadow:
+              "0 0 5px var(--glow-color), 0 0 10px var(--glow-color), 0 0 15px var(--glow-color)",
             filter: "brightness(1)",
           },
           "100%": {
-            boxShadow: "0 0 10px var(--glow-color), 0 0 20px var(--glow-color), 0 0 30px var(--glow-color)",
+            boxShadow:
+              "0 0 10px var(--glow-color), 0 0 20px var(--glow-color), 0 0 30px var(--glow-color)",
             filter: "brightness(1.2)",
           },
         },
@@ -134,7 +137,8 @@ module.exports = {
       backgroundImage: {
         "cyber-grid":
           "linear-gradient(rgba(0,255,136,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,136,0.1) 1px, transparent 1px)",
-        "neon-gradient": "linear-gradient(45deg, #00ff88, #00d4ff, #ff0080, #8b5cf6)",
+        "neon-gradient":
+          "linear-gradient(45deg, #00ff88, #00d4ff, #ff0080, #8b5cf6)",
         "cyber-mesh":
           "radial-gradient(ellipse at top, rgba(0,255,136,0.1), transparent), radial-gradient(ellipse at bottom, rgba(0,212,255,0.1), transparent)",
       },
@@ -144,4 +148,4 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};
