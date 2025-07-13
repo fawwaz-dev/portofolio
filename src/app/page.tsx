@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import { ArrowRight, Play, Zap } from "lucide-react";
 import Scene3D from "@/components/3D/Scene3D";
 import InteractiveText from "@/components/ui/InteractiveText";
@@ -29,6 +29,37 @@ export default function HomePage() {
 
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isLowPerformance, setIsLowPerformance] = useState(false);
+
+  // Throttle function for performance
+  const throttle = useCallback((func: Function, limit: number) => {
+    let inThrottle: boolean;
+    return function (this: any, ...args: any[]) {
+      if (!inThrottle) {
+        func.apply(this, args);
+        inThrottle = true;
+        setTimeout(() => (inThrottle = false), limit);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    // Check device performance capabilities
+    const checkPerformance = () => {
+      const isMobile = window.innerWidth < 768;
+      const isLowEnd = navigator.hardwareConcurrency <= 4;
+      const hasReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      setIsLowPerformance(isMobile || isLowEnd || hasReducedMotion);
+    };
+
+    checkPerformance();
+    window.addEventListener("resize", checkPerformance);
+
+    return () => window.removeEventListener("resize", checkPerformance);
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 1000);
@@ -36,16 +67,19 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+    // Skip mouse tracking on low-performance devices
+    if (isLowPerformance) return;
+
+    const throttledMouseMove = throttle((e: MouseEvent) => {
       setMousePosition({
         x: (e.clientX / window.innerWidth) * 2 - 1,
         y: (e.clientY / window.innerHeight) * 2 - 1,
       });
-    };
+    }, 32); // ~30fps for better performance
 
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+    window.addEventListener("mousemove", throttledMouseMove);
+    return () => window.removeEventListener("mousemove", throttledMouseMove);
+  }, [isLowPerformance, throttle]);
 
   useEffect(() => {
     async function fetchProjects() {
@@ -73,18 +107,20 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-br from-neon-green/10 via-transparent to-neon-blue/10" />
         <div className="absolute inset-0 bg-cyber-mesh" />
 
-        {/* Scanning Line Effect */}
-        <div className="absolute inset-0 overflow-hidden">
-          <motion.div
-            className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-neon-green to-transparent"
-            animate={{ y: ["0vh", "100vh"] }}
-            transition={{
-              duration: 3,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "linear",
-            }}
-          />
-        </div>
+        {/* Scanning Line Effect - Conditional */}
+        {!isLowPerformance && (
+          <div className="absolute inset-0 overflow-hidden">
+            <motion.div
+              className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-neon-green to-transparent"
+              animate={{ y: ["0vh", "100vh"] }}
+              transition={{
+                duration: 3,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "linear",
+              }}
+            />
+          </div>
+        )}
 
         {/* Main Content */}
         <motion.div
@@ -304,6 +340,7 @@ export default function HomePage() {
             </motion.div>
           </motion.div>
         </motion.div>
+
         {/* Scroll Indicator */}
         <motion.div
           initial={{ opacity: 0 }}

@@ -9,6 +9,7 @@ import SmoothScroll from "@/components/effects/SmoothScroll";
 import CursorFollower from "@/components/effects/CursorFollower";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import CyberGrid from "@/components/effects/CyberGrid";
+import CursorDebug from "@/components/CursorDebug";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -77,6 +78,7 @@ export default function RootLayout({
               <CursorFollower />
               <ScrollProgress />
               <CyberGrid />
+              <CursorDebug />
 
               {/* Cyberpunk Animated Background */}
               <div className="fixed inset-0 overflow-hidden pointer-events-none">

@@ -47,6 +47,11 @@ body,
   cursor: none !important;
 }
 
+/* Fallback cursor for when custom cursor fails */
+.cursor-fallback {
+  cursor: crosshair !important;
+}
+
 /* Cyberpunk Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -302,4 +307,19 @@ html {
 
 .animate-shimmer {
   animation: shimmer 2s infinite;
+}
+
+/* Neon Flicker Animation */
+@keyframes neon-flicker {
+  0%,
+  100% {
+    text-shadow: 0 0 10px currentColor;
+  }
+  50% {
+    text-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
+  }
+}
+
+.animate-neon-flicker {
+  animation: neon-flicker 2s infinite;
 }

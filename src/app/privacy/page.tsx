@@ -266,7 +266,7 @@ export default function PrivacyPage() {
             <motion.div variants={itemVariants} className="text-center">
               <div className="inline-flex items-center space-x-3 bg-cyber-gray/50 backdrop-blur-xl border border-electric-400/30 rounded-full px-6 py-3">
                 <span className="text-xs sm:text-sm font-mono text-electric-400 tracking-wider">
-                  LAST_UPDATED: JULI_2025
+                  LAST_UPDATED: JULY_2025
                 </span>
               </div>
             </motion.div>

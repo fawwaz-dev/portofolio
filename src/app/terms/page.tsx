@@ -322,7 +322,7 @@ export default function TermsPage() {
                 </p>
                 <div className="space-y-2 text-electric-300/80 font-mono text-sm sm:text-base">
                   <p>
-                    <strong>Email:</strong> legal@fawwaz.dev
+                    <strong>Email:</strong> fawwazalfarisi.works@gmail.com
                   </p>
                   <p>
                     <strong>Response Time:</strong> Within 7 business days

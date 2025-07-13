@@ -1,12 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export default function CursorFollower() {
   const [isVisible, setIsVisible] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isLowPerformance, setIsLowPerformance] = useState(false);
+
+  // Debug logging in development
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("CursorFollower Debug:", {
+        isMobile,
+        isLowPerformance,
+        isVisible,
+        windowWidth: window.innerWidth,
+        hardwareConcurrency: navigator.hardwareConcurrency,
+        hasReducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)")
+          .matches,
+      });
+    }
+  }, [isMobile, isLowPerformance, isVisible]);
 
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
@@ -15,28 +31,46 @@ export default function CursorFollower() {
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
 
-  useEffect(() => {
-    // Check if device is mobile/tablet
-    const checkMobile = () => {
-      const isMobileDevice = window.innerWidth < 1024; // lg breakpoint
-      setIsMobile(isMobileDevice);
+  // Throttle function for performance
+  const throttle = useCallback((func: Function, limit: number) => {
+    let inThrottle: boolean;
+    return function (this: any, ...args: any[]) {
+      if (!inThrottle) {
+        func.apply(this, args);
+        inThrottle = true;
+        setTimeout(() => (inThrottle = false), limit);
+      }
     };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-
-    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   useEffect(() => {
-    // Don't set up cursor events on mobile
+    // Check device capabilities - More lenient for cursor
+    const checkDevice = () => {
+      const isMobileDevice = window.innerWidth < 768; // Only disable on actual mobile
+      const isLowEnd = navigator.hardwareConcurrency <= 2; // More lenient threshold
+      const hasReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      setIsMobile(isMobileDevice);
+      setIsLowPerformance(isLowEnd || hasReducedMotion);
+    };
+
+    checkDevice();
+    window.addEventListener("resize", checkDevice);
+
+    return () => window.removeEventListener("resize", checkDevice);
+  }, []);
+
+  useEffect(() => {
+    // Only disable cursor on actual mobile devices (touch-only)
     if (isMobile) return;
 
-    const moveCursor = (e: MouseEvent) => {
+    const throttledMoveCursor = throttle((e: MouseEvent) => {
       cursorX.set(e.clientX - 16);
       cursorY.set(e.clientY - 16);
       setIsVisible(true);
-    };
+    }, 16); // ~60fps
 
     const handleMouseEnter = () => setIsHovering(true);
     const handleMouseLeave = () => setIsHovering(false);
@@ -50,22 +84,32 @@ export default function CursorFollower() {
       el.addEventListener("mouseleave", handleMouseLeave);
     });
 
-    window.addEventListener("mousemove", moveCursor);
+    window.addEventListener("mousemove", throttledMoveCursor);
 
     return () => {
-      window.removeEventListener("mousemove", moveCursor);
+      window.removeEventListener("mousemove", throttledMoveCursor);
       interactiveElements.forEach((el) => {
         el.removeEventListener("mouseenter", handleMouseEnter);
         el.removeEventListener("mouseleave", handleMouseLeave);
       });
     };
-  }, [cursorX, cursorY, isMobile]);
+  }, [cursorX, cursorY, isMobile, throttle]);
 
-  // Don't render cursor on mobile/tablet
-  if (isMobile) return null;
+  // Only disable cursor on actual mobile devices (touch-only)
+  if (isMobile) {
+    console.log("Cursor disabled: Mobile device detected");
+    return null;
+  }
 
   return (
     <>
+      {/* Debug: Force cursor visibility for testing */}
+      {process.env.NODE_ENV === "development" && (
+        <div className="fixed top-4 left-4 bg-red-500 text-white p-2 rounded z-[9999] text-xs">
+          Cursor Active: {isVisible ? "Visible" : "Hidden"}
+        </div>
+      )}
+
       {/* Main Cursor - Enhanced Cyberpunk Style */}
       <motion.div
         className="fixed top-0 left-0 w-8 h-8 pointer-events-none z-[60] mix-blend-difference"
