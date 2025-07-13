@@ -15,6 +15,7 @@ interface CyberButtonProps {
   type?: "button" | "submit" | "reset";
   href?: string;
   external?: boolean;
+  ariaLabel?: string;
 }
 
 export default function CyberButton({
@@ -27,6 +28,7 @@ export default function CyberButton({
   type = "button",
   href,
   external = false,
+  ariaLabel,
 }: CyberButtonProps) {
   const buttonConfig = DESIGN_SYSTEM.buttons[variant];
 
@@ -77,6 +79,7 @@ export default function CyberButton({
               ? "0 0 20px rgba(0, 255, 136, 0.5)"
               : "0 0 20px rgba(0, 255, 136, 0.3)",
         }}
+        aria-label={ariaLabel}
       >
         {content}
       </a>
@@ -96,6 +99,7 @@ export default function CyberButton({
             ? "0 0 20px rgba(0, 255, 136, 0.5)"
             : "0 0 20px rgba(0, 255, 136, 0.3)",
       }}
+      aria-label={ariaLabel}
     >
       {content}
     </button>

@@ -15,12 +15,14 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter",
+  preload: true,
 });
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-mono",
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -55,6 +57,9 @@ export const metadata: Metadata = {
     description:
       "Full-stack developer building scalable apps using Next.js, Laravel, React, Vue, Astro, Tailwind CSS, Framer Motion, TypeScript, Node.js, PostgreSQL, and MySQL.",
   },
+  other: {
+    "theme-color": "#00ff88",
+  },
 };
 
 export default function RootLayout({
@@ -64,6 +69,36 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Preload critical resources */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+
+        {/* Performance monitoring */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Performance monitoring
+              if (typeof window !== 'undefined') {
+                window.addEventListener('load', () => {
+                  if ('performance' in window) {
+                    const perfData = performance.getEntriesByType('navigation')[0];
+                    if (perfData) {
+                      console.log('Page Load Time:', perfData.loadEventEnd - perfData.loadEventStart, 'ms');
+                      console.log('DOM Content Loaded:', perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart, 'ms');
+                    }
+                  }
+                });
+              }
+            `,
+          }}
+        />
+      </head>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >

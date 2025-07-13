@@ -1,14 +1,36 @@
 "use client";
 
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, Suspense } from "react";
 import { ArrowRight, Play, Zap } from "lucide-react";
 import InteractiveText from "@/components/ui/InteractiveText";
 import { getProjects } from "@/lib/supabase";
-import AboutSection from "@/components/AboutSection";
-import ProjectsSection from "@/components/ProjectsSection";
-import ContactSection from "@/components/ContactSection";
 import CyberButton from "@/components/ui/CyberButton";
+
+// Dynamic imports for heavy components
+const AboutSection = dynamic(() => import("@/components/AboutSection"), {
+  loading: () => (
+    <div className="h-96 bg-cyber-gray/20 rounded-lg animate-pulse" />
+  ),
+  ssr: false,
+});
+
+const ProjectsSection = dynamic(() => import("@/components/ProjectsSection"), {
+  loading: () => (
+    <div className="h-96 bg-cyber-gray/20 rounded-lg animate-pulse" />
+  ),
+  ssr: false,
+});
+
+const ContactSection = dynamic(() => import("@/components/ContactSection"), {
+  loading: () => (
+    <div className="h-96 bg-cyber-gray/20 rounded-lg animate-pulse" />
+  ),
+  ssr: false,
+});
+
+// Import dynamic from Next.js
+import dynamic from "next/dynamic";
 
 export default function HomePage() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -354,14 +376,30 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* About Section */}
-      <AboutSection />
+      {/* Lazy Loaded Sections */}
+      <Suspense
+        fallback={
+          <div className="h-96 bg-cyber-gray/20 rounded-lg animate-pulse" />
+        }
+      >
+        <AboutSection />
+      </Suspense>
 
-      {/* Projects Section */}
-      <ProjectsSection />
+      <Suspense
+        fallback={
+          <div className="h-96 bg-cyber-gray/20 rounded-lg animate-pulse" />
+        }
+      >
+        <ProjectsSection />
+      </Suspense>
 
-      {/* Contact Section */}
-      <ContactSection />
+      <Suspense
+        fallback={
+          <div className="h-96 bg-cyber-gray/20 rounded-lg animate-pulse" />
+        }
+      >
+        <ContactSection />
+      </Suspense>
     </div>
   );
 }
