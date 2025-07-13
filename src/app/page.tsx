@@ -2,11 +2,10 @@
 
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
-import Link from "next/link";
 import { ArrowRight, Play, Zap } from "lucide-react";
 import Scene3D from "@/components/3D/Scene3D";
 import InteractiveText from "@/components/ui/InteractiveText";
-import { getProjects, type Project } from "@/lib/supabase";
+import { getProjects } from "@/lib/supabase";
 import AboutSection from "@/components/AboutSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import ContactSection from "@/components/ContactSection";
@@ -51,7 +50,7 @@ export default function HomePage() {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const data = await getProjects();
+        await getProjects();
       } catch (error) {
         console.error("Error fetching projects:", error);
       }

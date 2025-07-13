@@ -212,8 +212,8 @@ export default function TermsPage() {
                   <li className="flex items-start space-x-3">
                     <span className="text-neon-green">•</span>
                     <span>
-                      The website is provided "as is" without warranties of any
-                      kind
+                      The website is provided &quot;as is&quot; without
+                      warranties of any kind
                     </span>
                   </li>
                   <li className="flex items-start space-x-3">

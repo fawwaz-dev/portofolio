@@ -161,7 +161,7 @@ export default function AboutSectionSkeleton({
                   <span className="text-neon-green">$</span>
                   <span className="text-electric-400">echo</span>
                   <span className="text-white">
-                    "Building the future, one pixel at a time..."
+                    &quot;Building the future, one pixel at a time...&quot;
                   </span>
                 </motion.div>
               </div>

@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Skeleton } from "@/components/ui/skeleton";
 
 interface ProjectCardSkeletonProps {
   index?: number;

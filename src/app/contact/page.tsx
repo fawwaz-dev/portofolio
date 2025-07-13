@@ -133,7 +133,7 @@ export default function ContactPage() {
                 transition={{ duration: 0.8, delay: 0.6 }}
                 className="text-base sm:text-xl md:text-2xl text-electric-300/80 max-w-4xl mx-auto mb-12 leading-relaxed font-mono"
               >
-                Let's build something{" "}
+                Let&apos;s build something{" "}
                 <span className="text-neon-green font-bold animate-neon-flicker">
                   exceptional
                 </span>{" "}
@@ -149,7 +149,7 @@ export default function ContactPage() {
               transition={{ duration: 0.8, delay: 0.8 }}
               className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto mb-16"
             >
-              {contactMetadata.map((item, index) => (
+              {contactMetadata.map((item) => (
                 <motion.div
                   key={item.label}
                   variants={itemVariants}

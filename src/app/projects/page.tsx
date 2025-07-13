@@ -2,15 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import {
-  Search,
-  Filter,
-  Grid,
-  List,
-  Zap,
-  ExternalLink,
-  Github,
-} from "lucide-react";
+import { Search, Filter, Grid, List } from "lucide-react";
 import ProjectCard from "@/components/ProjectCard";
 import { ProjectCardSkeleton } from "@/components/skeletons";
 import InteractiveText from "@/components/ui/InteractiveText";
@@ -93,11 +85,6 @@ export default function ProjectsPage() {
         staggerChildren: 0.1,
       },
     },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
   };
 
   return (
@@ -315,7 +302,7 @@ export default function ProjectsPage() {
                 </h3>
                 <p className="text-electric-300/70 mb-6 font-mono">
                   Try adjusting your search criteria or filters to find what
-                  you're looking for.
+                  you&apos;re looking for.
                 </p>
                 <motion.button
                   whileHover={{ scale: 1.05 }}

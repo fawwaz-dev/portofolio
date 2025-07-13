@@ -26,11 +26,6 @@ export default function ContactForm() {
     type: "idle" | "success" | "error";
     message: string;
   }>({ type: "idle", message: "" });
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -231,35 +226,6 @@ export default function ContactForm() {
             )}
             <span className="font-mono text-sm">{submitStatus.message}</span>
           </div>
-        </motion.div>
-      )}
-
-      {/* Validation Errors */}
-      {errors.name && (
-        <motion.div
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="mt-2 text-red-400 text-sm font-mono"
-        >
-          {errors.name}
-        </motion.div>
-      )}
-      {errors.email && (
-        <motion.div
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="mt-2 text-red-400 text-sm font-mono"
-        >
-          {errors.email}
-        </motion.div>
-      )}
-      {errors.message && (
-        <motion.div
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="mt-2 text-red-400 text-sm font-mono"
-        >
-          {errors.message}
         </motion.div>
       )}
     </motion.form>

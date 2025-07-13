@@ -87,8 +87,8 @@ export default function ContactSection() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-sm sm:text-base md:text-lg lg:text-xl text-electric-300/80 max-w-4xl mx-auto mb-8 sm:mb-12 leading-relaxed font-mono px-2"
             >
-              Ready to bring your digital vision to life? Let's collaborate and
-              create something extraordinary together.
+              Ready to bring your digital vision to life? Let&apos;s collaborate
+              and create something extraordinary together.
             </motion.p>
           </div>
 
@@ -113,7 +113,7 @@ export default function ContactSection() {
               </motion.div>
 
               <div className="space-y-4 sm:space-y-6">
-                {contactInfo.map((info, i) => (
+                {contactInfo.map((info) => (
                   <motion.div
                     key={info.label}
                     variants={itemVariants}

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Eye, Zap, ExternalLink, Github } from "lucide-react";
+import { ArrowRight, Eye } from "lucide-react";
 import Link from "next/link";
 import ProjectCard from "@/components/ProjectCard";
 import { ProjectCardSkeleton } from "@/components/skeletons";
@@ -37,11 +37,6 @@ export default function ProjectsSection() {
         staggerChildren: 0.1,
       },
     },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
   };
 
   const featuredProjects = projects.slice(0, 3);

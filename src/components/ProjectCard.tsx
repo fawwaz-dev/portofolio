@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { ExternalLink, Github, Zap } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
 import type { Project } from "@/lib/supabase";
 import CyberButton from "@/components/ui/CyberButton";
 
@@ -12,64 +11,7 @@ interface ProjectCardProps {
   index: number;
 }
 
-// Custom hook for responsive tag overflow
-function useTagOverflow(technologies: string[]) {
-  const [visibleTags, setVisibleTags] = useState<string[]>([]);
-  const [hiddenCount, setHiddenCount] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const tagRefs = useRef<(HTMLSpanElement | null)[]>([]);
-  console.log(technologies);
-
-  useEffect(() => {
-    const calculateVisibleTags = () => {
-      if (!containerRef.current) return;
-
-      const container = containerRef.current;
-      const containerWidth = container.offsetWidth;
-      let currentWidth = 0;
-      const gap = 8; // 2 * 4px gap
-      const visible: string[] = [];
-      let hidden = 0;
-
-      // Reset refs array
-      tagRefs.current = tagRefs.current.slice(0, technologies.length);
-
-      for (let i = 0; i < technologies.length; i++) {
-        const tagElement = tagRefs.current[i];
-        if (!tagElement) continue;
-
-        const tagWidth = tagElement.offsetWidth;
-        const wouldFit = currentWidth + tagWidth + gap <= containerWidth;
-
-        if (wouldFit) {
-          visible.push(technologies[i]);
-          currentWidth += tagWidth + gap;
-        } else {
-          hidden++;
-        }
-      }
-
-      setVisibleTags(visible);
-      setHiddenCount(hidden);
-    };
-
-    // Calculate on mount and resize
-    calculateVisibleTags();
-    const resizeObserver = new ResizeObserver(calculateVisibleTags);
-
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
-    }
-
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, [technologies]);
-
-  return { visibleTags, hiddenCount, containerRef, tagRefs };
-}
-
-export default function ProjectCard({ project, index }: ProjectCardProps) {
+export default function ProjectCard({ project }: ProjectCardProps) {
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
