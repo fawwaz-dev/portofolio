@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export default function CursorFollower() {
@@ -27,11 +27,12 @@ export default function CursorFollower() {
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 
+  // Optimize spring configuration for better performance
   const springConfig = { damping: 25, stiffness: 700 };
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
 
-  // Throttle function for performance
+  // Optimized throttle function with useCallback
   const throttle = useCallback(
     (func: (e: MouseEvent) => void, limit: number) => {
       let inThrottle: boolean;
@@ -46,30 +47,32 @@ export default function CursorFollower() {
     []
   );
 
+  // Optimize device capability check
+  const checkDevice = useCallback(() => {
+    if (typeof window === "undefined") return;
+
+    const isMobileDevice = window.innerWidth < 768;
+    const isLowEnd = navigator.hardwareConcurrency <= 2;
+    const hasReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    setIsMobile(isMobileDevice);
+    setIsLowPerformance(isLowEnd || hasReducedMotion);
+  }, []);
+
   useEffect(() => {
-    // Check device capabilities - More lenient for cursor
-    const checkDevice = () => {
-      // Ensure we're on the client side
-      if (typeof window === "undefined") return;
-
-      const isMobileDevice = window.innerWidth < 768; // Only disable on actual mobile
-      const isLowEnd = navigator.hardwareConcurrency <= 2; // More lenient threshold
-      const hasReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-
-      setIsMobile(isMobileDevice);
-      setIsLowPerformance(isLowEnd || hasReducedMotion);
-    };
-
-    // Only run on client side
     if (typeof window !== "undefined") {
-      checkDevice();
+      // Defer device check to avoid blocking initial render
+      const timer = setTimeout(checkDevice, 50);
       window.addEventListener("resize", checkDevice);
 
-      return () => window.removeEventListener("resize", checkDevice);
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener("resize", checkDevice);
+      };
     }
-  }, []);
+  }, [checkDevice]);
 
   useEffect(() => {
     // Only disable cursor on actual mobile devices (touch-only)
@@ -84,19 +87,30 @@ export default function CursorFollower() {
     const handleMouseEnter = () => setIsHovering(true);
     const handleMouseLeave = () => setIsHovering(false);
 
-    // Add event listeners to interactive elements
-    const interactiveElements = document.querySelectorAll(
-      "button, a, [data-cursor-hover]"
-    );
-    interactiveElements.forEach((el) => {
-      el.addEventListener("mouseenter", handleMouseEnter);
-      el.addEventListener("mouseleave", handleMouseLeave);
-    });
+    // Optimize event listener attachment
+    const addEventListeners = () => {
+      const interactiveElements = document.querySelectorAll(
+        "button, a, [data-cursor-hover]"
+      );
+      interactiveElements.forEach((el) => {
+        el.addEventListener("mouseenter", handleMouseEnter);
+        el.addEventListener("mouseleave", handleMouseLeave);
+      });
+    };
+
+    // Defer event listener attachment
+    const timer = setTimeout(addEventListeners, 100);
 
     window.addEventListener("mousemove", throttledMoveCursor);
 
     return () => {
+      clearTimeout(timer);
       window.removeEventListener("mousemove", throttledMoveCursor);
+
+      // Clean up event listeners
+      const interactiveElements = document.querySelectorAll(
+        "button, a, [data-cursor-hover]"
+      );
       interactiveElements.forEach((el) => {
         el.removeEventListener("mouseenter", handleMouseEnter);
         el.removeEventListener("mouseleave", handleMouseLeave);
@@ -166,18 +180,24 @@ export default function CursorFollower() {
 
       {/* Outer Ring */}
       <motion.div
-        className="fixed top-0 left-0 w-12 h-12 pointer-events-none z-[50] border-[1px] border-neon-green/20 rounded-full blur-[1px]"
+        className="fixed top-0 left-0 w-24 h-24 pointer-events-none z-[50]"
         style={{
           x: cursorXSpring,
           y: cursorYSpring,
         }}
         animate={{
-          scale: isHovering ? 2 : 1,
-          opacity: isVisible ? 0.4 : 0,
-          rotate: isHovering ? 180 : 0,
+          scale: isHovering ? 3 : 1,
+          opacity: isVisible ? 0.2 : 0,
         }}
-        transition={{ duration: 0.3 }}
-      />
+        transition={{ duration: 0.6 }}
+      >
+        <div
+          className="w-full h-full border-2 border-neon-green rounded-full"
+          style={{
+            boxShadow: "0 0 60px rgba(0, 255, 136, 0.6)",
+          }}
+        />
+      </motion.div>
     </>
   );
 }

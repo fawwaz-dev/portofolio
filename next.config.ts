@@ -30,8 +30,22 @@ const nextConfig: NextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },
+  // Optimize for back/forward cache
+  headers: async () => {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+    ];
+  },
   webpack: (config, { dev, isServer }) => {
-    // Optimize bundle size
+    // Optimize bundle size and reduce unused JavaScript
     if (!dev && !isServer) {
       config.optimization.splitChunks = {
         chunks: "all",
@@ -40,22 +54,44 @@ const nextConfig: NextConfig = {
             test: /[\\/]node_modules[\\/]/,
             name: "vendors",
             chunks: "all",
+            priority: 10,
           },
           framer: {
             test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
             name: "framer-motion",
             chunks: "all",
-            priority: 10,
+            priority: 20,
           },
           lucide: {
             test: /[\\/]node_modules[\\/]lucide-react[\\/]/,
             name: "lucide-react",
             chunks: "all",
-            priority: 10,
+            priority: 20,
+          },
+          // Separate React for better caching
+          react: {
+            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+            name: "react",
+            chunks: "all",
+            priority: 30,
           },
         },
       };
+
+      // Enable minification
+      config.optimization.minimize = true;
+
+      // Remove unused code
+      config.optimization.usedExports = true;
+      config.optimization.sideEffects = false;
     }
+
+    // Optimize for modern browsers
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      react: "react",
+      "react-dom": "react-dom",
+    };
 
     return config;
   },

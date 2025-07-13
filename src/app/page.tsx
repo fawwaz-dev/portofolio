@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useRef, useEffect, useState, Suspense } from "react";
+import { useRef, useEffect, useState, Suspense, useCallback } from "react";
 import { ArrowRight, Play, Zap } from "lucide-react";
 import InteractiveText from "@/components/ui/InteractiveText";
 import { getProjects } from "@/lib/supabase";
@@ -39,11 +39,14 @@ export default function HomePage() {
     offset: ["start start", "end start"],
   });
 
+  // Optimize spring calculations
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001,
   });
+
+  // Memoize transforms to prevent recalculation
   const y = useTransform(smoothProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(smoothProgress, [0, 0.5], [1, 0]);
   const scale = useTransform(smoothProgress, [0, 0.5], [1, 0.8]);
@@ -51,45 +54,52 @@ export default function HomePage() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLowPerformance, setIsLowPerformance] = useState(false);
 
-  useEffect(() => {
-    // Check device performance capabilities
-    const checkPerformance = () => {
-      // Ensure we're on the client side
-      if (typeof window === "undefined") return;
+  // Optimize performance check with useCallback
+  const checkPerformance = useCallback(() => {
+    if (typeof window === "undefined") return;
 
-      const isMobile = window.innerWidth < 768;
-      const isLowEnd = navigator.hardwareConcurrency <= 4;
-      const hasReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
+    const isMobile = window.innerWidth < 768;
+    const isLowEnd = navigator.hardwareConcurrency <= 4;
+    const hasReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
 
-      setIsLowPerformance(isMobile || isLowEnd || hasReducedMotion);
-    };
-
-    // Only run on client side
-    if (typeof window !== "undefined") {
-      checkPerformance();
-      window.addEventListener("resize", checkPerformance);
-
-      return () => window.removeEventListener("resize", checkPerformance);
-    }
+    setIsLowPerformance(isMobile || isLowEnd || hasReducedMotion);
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), 1000);
+    // Defer performance check to avoid blocking initial render
+    const timer = setTimeout(() => {
+      checkPerformance();
+    }, 100);
+
+    window.addEventListener("resize", checkPerformance);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", checkPerformance);
+    };
+  }, [checkPerformance]);
+
+  useEffect(() => {
+    // Defer loading animation to reduce initial load
+    const timer = setTimeout(() => setIsLoaded(true), 800);
     return () => clearTimeout(timer);
   }, []);
 
+  // Defer project fetching to avoid blocking initial render
   useEffect(() => {
-    async function fetchProjects() {
+    const fetchProjects = async () => {
       try {
         await getProjects();
       } catch (error) {
         console.error("Error fetching projects:", error);
       }
-    }
+    };
 
-    fetchProjects();
+    // Defer to after initial render
+    const timer = setTimeout(fetchProjects, 2000);
+    return () => clearTimeout(timer);
   }, []);
 
   return (

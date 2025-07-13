@@ -79,6 +79,10 @@ export default function RootLayout({
         />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
 
+        {/* Back/Forward Cache Support */}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="format-detection" content="telephone=no" />
+
         {/* Performance monitoring */}
         <script
           dangerouslySetInnerHTML={{
@@ -92,6 +96,13 @@ export default function RootLayout({
                       console.log('Page Load Time:', perfData.loadEventEnd - perfData.loadEventStart, 'ms');
                       console.log('DOM Content Loaded:', perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart, 'ms');
                     }
+                  }
+                });
+
+                // Back/Forward Cache Support
+                window.addEventListener('pageshow', (event) => {
+                  if (event.persisted) {
+                    console.log('Page restored from back/forward cache');
                   }
                 });
               }
