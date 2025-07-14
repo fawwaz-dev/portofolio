@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export default function CursorFollower() {
@@ -8,7 +8,6 @@ export default function CursorFollower() {
   const [isHovering, setIsHovering] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isLowPerformance, setIsLowPerformance] = useState(false);
-  const lastMouseEvent = useRef(0);
 
   // Debug logging in development
   useEffect(() => {
@@ -17,13 +16,10 @@ export default function CursorFollower() {
         isMobile,
         isLowPerformance,
         isVisible,
-        windowWidth: typeof window !== "undefined" ? window.innerWidth : 0,
-        hardwareConcurrency:
-          typeof navigator !== "undefined" ? navigator.hardwareConcurrency : 0,
-        hasReducedMotion:
-          typeof window !== "undefined"
-            ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
-            : false,
+        windowWidth: window.innerWidth,
+        hardwareConcurrency: navigator.hardwareConcurrency,
+        hasReducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)")
+          .matches,
       });
     }
   }, [isMobile, isLowPerformance, isVisible]);
@@ -31,12 +27,11 @@ export default function CursorFollower() {
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 
-  // Optimize spring configuration for better performance
   const springConfig = { damping: 25, stiffness: 700 };
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
 
-  // Optimized throttle function with useCallback
+  // Throttle function for performance
   const throttle = useCallback(
     (func: (e: MouseEvent) => void, limit: number) => {
       let inThrottle: boolean;
@@ -51,104 +46,67 @@ export default function CursorFollower() {
     []
   );
 
-  // Optimize device capability check
-  const checkDevice = useCallback(() => {
-    if (typeof window === "undefined") return;
+  useEffect(() => {
+    // Check device capabilities - More lenient for cursor
+    const checkDevice = () => {
+      // Ensure we're on the client side
+      if (typeof window === "undefined") return;
 
-    const isMobileDevice = window.innerWidth < 768;
-    const isLowEnd = navigator.hardwareConcurrency <= 1; // Very relaxed threshold
-    const hasReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
+      const isMobileDevice = window.innerWidth < 768; // Only disable on actual mobile
+      const isLowEnd = navigator.hardwareConcurrency <= 2; // More lenient threshold
+      const hasReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
 
-    // Debug logging
-    if (process.env.NODE_ENV === "development") {
-      console.log("CursorFollower Device Check:", {
-        windowWidth: window.innerWidth,
-        hardwareConcurrency: navigator.hardwareConcurrency,
-        hasReducedMotion,
-        isMobileDevice,
-        isLowEnd,
-        willShowCursor: !isMobileDevice && !isLowEnd && !hasReducedMotion,
-      });
+      setIsMobile(isMobileDevice);
+      setIsLowPerformance(isLowEnd || hasReducedMotion);
+    };
+
+    // Only run on client side
+    if (typeof window !== "undefined") {
+      checkDevice();
+      window.addEventListener("resize", checkDevice);
+
+      return () => window.removeEventListener("resize", checkDevice);
     }
-
-    setIsMobile(isMobileDevice);
-    setIsLowPerformance(isLowEnd || hasReducedMotion);
-  }, []);
-
-  // Optimized mouse event handler with throttling
-  const handleMouseMove = useCallback(
-    throttle((e: MouseEvent) => {
-      const now = Date.now();
-      if (now - lastMouseEvent.current < 16) return; // ~60fps max
-      lastMouseEvent.current = now;
-
-      cursorX.set(e.clientX - 16);
-      cursorY.set(e.clientY - 16);
-    }, 16),
-    [cursorX, cursorY]
-  );
-
-  // Optimized hover detection
-  const handleMouseEnter = useCallback(() => {
-    setIsHovering(true);
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    setIsHovering(false);
   }, []);
 
   useEffect(() => {
-    // Defer device check to avoid blocking initial render
-    const timer = setTimeout(() => {
-      checkDevice();
+    // Only disable cursor on actual mobile devices (touch-only)
+    if (isMobile || typeof window === "undefined") return;
+
+    const throttledMoveCursor = throttle((e: MouseEvent) => {
+      cursorX.set(e.clientX - 16);
+      cursorY.set(e.clientY - 16);
       setIsVisible(true);
-    }, 100);
+    }, 16); // ~60fps
 
-    // Force cursor to be visible for debugging
-    setIsVisible(true);
+    const handleMouseEnter = () => setIsHovering(true);
+    const handleMouseLeave = () => setIsHovering(false);
 
-    // Add event listeners for cursor tracking
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseenter", handleMouseEnter);
-    document.addEventListener("mouseleave", handleMouseLeave);
-
-    // Add hover detection for interactive elements
+    // Add event listeners to interactive elements
     const interactiveElements = document.querySelectorAll(
-      "a, button, [role='button'], input, textarea, select"
+      "button, a, [data-cursor-hover]"
     );
-
     interactiveElements.forEach((el) => {
       el.addEventListener("mouseenter", handleMouseEnter);
       el.addEventListener("mouseleave", handleMouseLeave);
     });
 
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseenter", handleMouseEnter);
-      document.removeEventListener("mouseleave", handleMouseLeave);
+    window.addEventListener("mousemove", throttledMoveCursor);
 
+    return () => {
+      window.removeEventListener("mousemove", throttledMoveCursor);
       interactiveElements.forEach((el) => {
         el.removeEventListener("mouseenter", handleMouseEnter);
         el.removeEventListener("mouseleave", handleMouseLeave);
       });
     };
+  }, [cursorX, cursorY, isMobile, throttle]);
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [
-    isMobile,
-    isLowPerformance,
-    checkDevice,
-    handleMouseMove,
-    handleMouseEnter,
-    handleMouseLeave,
-  ]);
-
-  // Only disable on actual mobile devices (touch-only)
+  // Only disable cursor on actual mobile devices (touch-only)
   if (isMobile) {
+    console.log("Cursor disabled: Mobile device detected");
     return null;
   }
 
@@ -208,45 +166,18 @@ export default function CursorFollower() {
 
       {/* Outer Ring */}
       <motion.div
-        className="fixed top-0 left-0 w-32 h-32 pointer-events-none z-[50]"
+        className="fixed top-0 left-0 w-12 h-12 pointer-events-none z-[50] border-[1px] border-neon-green/20 rounded-full blur-[1px]"
         style={{
           x: cursorXSpring,
           y: cursorYSpring,
         }}
         animate={{
-          scale: isHovering ? 1.5 : 0.8,
-          opacity: isVisible ? 0.2 : 0,
-        }}
-        transition={{ duration: 0.6 }}
-      >
-        <div
-          className="w-full h-full border border-neon-green/30 rounded-full"
-          style={{
-            boxShadow: "0 0 30px rgba(0, 255, 136, 0.3)",
-          }}
-        />
-      </motion.div>
-
-      {/* Cyberpunk Data Stream Effect */}
-      <motion.div
-        className="fixed top-0 left-0 w-2 h-20 pointer-events-none z-[45]"
-        style={{
-          x: cursorXSpring,
-          y: cursorYSpring,
-        }}
-        animate={{
-          opacity: isHovering ? 0.6 : 0,
-          scaleY: isHovering ? 1 : 0,
+          scale: isHovering ? 2 : 1,
+          opacity: isVisible ? 0.4 : 0,
+          rotate: isHovering ? 180 : 0,
         }}
         transition={{ duration: 0.3 }}
-      >
-        <div
-          className="w-full h-full bg-gradient-to-b from-neon-green via-electric-400 to-transparent"
-          style={{
-            boxShadow: "0 0 20px rgba(0, 255, 136, 0.5)",
-          }}
-        />
-      </motion.div>
+      />
     </>
   );
 }
