@@ -19,13 +19,13 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizePackageImports: ["framer-motion", "lucide-react"],
-    // Enable modern JavaScript features
-    turbo: {
-      rules: {
-        "*.svg": {
-          loaders: ["@svgr/webpack"],
-          as: "*.js",
-        },
+  },
+  // Enable modern JavaScript features
+  turbopack: {
+    rules: {
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
       },
     },
   },
@@ -114,8 +114,6 @@ const nextConfig: NextConfig = {
 
     return config;
   },
-  // Performance optimizations
-  swcMinify: true,
   // Enable modern JavaScript features
   transpilePackages: ["framer-motion"],
 };

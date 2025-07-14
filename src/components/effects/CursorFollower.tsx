@@ -47,38 +47,21 @@ export default function CursorFollower() {
   );
 
   useEffect(() => {
-    // Check device capabilities - More lenient for cursor
+    // Simple device check - only disable on actual mobile
     const checkDevice = () => {
-      // Ensure we're on the client side
       if (typeof window === "undefined") return;
 
-      const isMobileDevice = window.innerWidth < 768; // Only disable on actual mobile
-      const isLowEnd = navigator.hardwareConcurrency <= 1; // Very lenient threshold
-      const hasReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-
-      // Debug logging
-      if (process.env.NODE_ENV === "development") {
-        console.log("CursorFollower Device Check:", {
-          windowWidth: window.innerWidth,
-          hardwareConcurrency: navigator.hardwareConcurrency,
-          hasReducedMotion,
-          isMobileDevice,
-          isLowEnd,
-          willShowCursor: !isMobileDevice && !isLowEnd && !hasReducedMotion,
-        });
-      }
+      // Only consider it mobile if it's a small screen AND has touch capability
+      const isMobileDevice =
+        window.innerWidth < 768 && "ontouchstart" in window;
 
       setIsMobile(isMobileDevice);
-      setIsLowPerformance(isLowEnd || hasReducedMotion);
+      setIsLowPerformance(false); // Don't disable based on performance in production
     };
 
-    // Only run on client side
     if (typeof window !== "undefined") {
       checkDevice();
       window.addEventListener("resize", checkDevice);
-
       return () => window.removeEventListener("resize", checkDevice);
     }
   }, []);
@@ -130,18 +113,14 @@ export default function CursorFollower() {
   }, [cursorX, cursorY, isMobile, throttle]);
 
   // Only disable cursor on actual mobile devices (touch-only)
-  // Temporarily disabled for debugging
-  if (false && isMobile) {
-    if (process.env.NODE_ENV === "development") {
-      console.log("Cursor disabled: Mobile device detected");
-    }
+  if (isMobile) {
     return null;
   }
 
-  // Force cursor to be visible for debugging
-  if (process.env.NODE_ENV === "development") {
+  // Set cursor visible when component mounts
+  useEffect(() => {
     setIsVisible(true);
-  }
+  }, []);
 
   return (
     <>
