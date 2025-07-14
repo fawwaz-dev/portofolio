@@ -53,10 +53,22 @@ export default function CursorFollower() {
       if (typeof window === "undefined") return;
 
       const isMobileDevice = window.innerWidth < 768; // Only disable on actual mobile
-      const isLowEnd = navigator.hardwareConcurrency <= 2; // More lenient threshold
+      const isLowEnd = navigator.hardwareConcurrency <= 1; // Very lenient threshold
       const hasReducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)"
       ).matches;
+
+      // Debug logging
+      if (process.env.NODE_ENV === "development") {
+        console.log("CursorFollower Device Check:", {
+          windowWidth: window.innerWidth,
+          hardwareConcurrency: navigator.hardwareConcurrency,
+          hasReducedMotion,
+          isMobileDevice,
+          isLowEnd,
+          willShowCursor: !isMobileDevice && !isLowEnd && !hasReducedMotion,
+        });
+      }
 
       setIsMobile(isMobileDevice);
       setIsLowPerformance(isLowEnd || hasReducedMotion);
@@ -73,13 +85,26 @@ export default function CursorFollower() {
 
   useEffect(() => {
     // Only disable cursor on actual mobile devices (touch-only)
-    if (isMobile || typeof window === "undefined") return;
+    if (isMobile || typeof window === "undefined") {
+      // Fallback: show cursor anyway if device detection fails
+      if (
+        typeof window !== "undefined" &&
+        process.env.NODE_ENV === "development"
+      ) {
+        console.log("Cursor fallback: Showing cursor despite device check");
+        setIsVisible(true);
+      }
+      return;
+    }
 
     const throttledMoveCursor = throttle((e: MouseEvent) => {
       cursorX.set(e.clientX - 16);
       cursorY.set(e.clientY - 16);
       setIsVisible(true);
     }, 16); // ~60fps
+
+    // Make cursor visible immediately
+    setIsVisible(true);
 
     const handleMouseEnter = () => setIsHovering(true);
     const handleMouseLeave = () => setIsHovering(false);
@@ -105,9 +130,17 @@ export default function CursorFollower() {
   }, [cursorX, cursorY, isMobile, throttle]);
 
   // Only disable cursor on actual mobile devices (touch-only)
-  if (isMobile) {
-    console.log("Cursor disabled: Mobile device detected");
+  // Temporarily disabled for debugging
+  if (false && isMobile) {
+    if (process.env.NODE_ENV === "development") {
+      console.log("Cursor disabled: Mobile device detected");
+    }
     return null;
+  }
+
+  // Force cursor to be visible for debugging
+  if (process.env.NODE_ENV === "development") {
+    setIsVisible(true);
   }
 
   return (
@@ -116,6 +149,10 @@ export default function CursorFollower() {
       {process.env.NODE_ENV === "development" && (
         <div className="fixed top-4 left-4 bg-red-500 text-white p-2 rounded z-[9999] text-xs">
           Cursor Active: {isVisible ? "Visible" : "Hidden"}
+          <br />
+          Mobile: {isMobile ? "Yes" : "No"}
+          <br />
+          Low Performance: {isLowPerformance ? "Yes" : "No"}
         </div>
       )}
 
