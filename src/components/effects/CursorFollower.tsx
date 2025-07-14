@@ -56,10 +56,22 @@ export default function CursorFollower() {
     if (typeof window === "undefined") return;
 
     const isMobileDevice = window.innerWidth < 768;
-    const isLowEnd = navigator.hardwareConcurrency <= 2;
+    const isLowEnd = navigator.hardwareConcurrency <= 1; // Very relaxed threshold
     const hasReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
+
+    // Debug logging
+    if (process.env.NODE_ENV === "development") {
+      console.log("CursorFollower Device Check:", {
+        windowWidth: window.innerWidth,
+        hardwareConcurrency: navigator.hardwareConcurrency,
+        hasReducedMotion,
+        isMobileDevice,
+        isLowEnd,
+        willShowCursor: !isMobileDevice && !isLowEnd && !hasReducedMotion,
+      });
+    }
 
     setIsMobile(isMobileDevice);
     setIsLowPerformance(isLowEnd || hasReducedMotion);
@@ -94,33 +106,34 @@ export default function CursorFollower() {
       setIsVisible(true);
     }, 100);
 
-    // Only add event listeners if not mobile and not low performance
-    if (!isMobile && !isLowPerformance) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseenter", handleMouseEnter);
-      document.addEventListener("mouseleave", handleMouseLeave);
+    // Force cursor to be visible for debugging
+    setIsVisible(true);
 
-      // Add hover detection for interactive elements
-      const interactiveElements = document.querySelectorAll(
-        "a, button, [role='button'], input, textarea, select"
-      );
+    // Add event listeners for cursor tracking
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseenter", handleMouseEnter);
+    document.addEventListener("mouseleave", handleMouseLeave);
+
+    // Add hover detection for interactive elements
+    const interactiveElements = document.querySelectorAll(
+      "a, button, [role='button'], input, textarea, select"
+    );
+
+    interactiveElements.forEach((el) => {
+      el.addEventListener("mouseenter", handleMouseEnter);
+      el.addEventListener("mouseleave", handleMouseLeave);
+    });
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseenter", handleMouseEnter);
+      document.removeEventListener("mouseleave", handleMouseLeave);
 
       interactiveElements.forEach((el) => {
-        el.addEventListener("mouseenter", handleMouseEnter);
-        el.addEventListener("mouseleave", handleMouseLeave);
+        el.removeEventListener("mouseenter", handleMouseEnter);
+        el.removeEventListener("mouseleave", handleMouseLeave);
       });
-
-      return () => {
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseenter", handleMouseEnter);
-        document.removeEventListener("mouseleave", handleMouseLeave);
-
-        interactiveElements.forEach((el) => {
-          el.removeEventListener("mouseenter", handleMouseEnter);
-          el.removeEventListener("mouseleave", handleMouseLeave);
-        });
-      };
-    }
+    };
 
     return () => {
       clearTimeout(timer);
@@ -134,8 +147,8 @@ export default function CursorFollower() {
     handleMouseLeave,
   ]);
 
-  // Don't render on mobile or low-performance devices
-  if (isMobile || isLowPerformance) {
+  // Only disable on actual mobile devices (touch-only)
+  if (isMobile) {
     return null;
   }
 
