@@ -112,15 +112,15 @@ export default function CursorFollower() {
     };
   }, [cursorX, cursorY, isMobile, throttle]);
 
-  // Only disable cursor on actual mobile devices (touch-only)
-  if (isMobile) {
-    return null;
-  }
-
   // Set cursor visible when component mounts
   useEffect(() => {
     setIsVisible(true);
   }, []);
+
+  // Only disable cursor on actual mobile devices (touch-only)
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <>

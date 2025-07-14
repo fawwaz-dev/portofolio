@@ -6,6 +6,7 @@ import { ArrowRight, Play, Zap } from "lucide-react";
 import InteractiveText from "@/components/ui/InteractiveText";
 import { getProjects } from "@/lib/supabase";
 import CyberButton from "@/components/ui/CyberButton";
+import dynamic from "next/dynamic";
 
 // Dynamic imports for heavy components
 const AboutSection = dynamic(() => import("@/components/AboutSection"), {
@@ -28,9 +29,6 @@ const ContactSection = dynamic(() => import("@/components/ContactSection"), {
   ),
   ssr: false,
 });
-
-// Import dynamic from Next.js
-import dynamic from "next/dynamic";
 
 export default function HomePage() {
   const containerRef = useRef<HTMLDivElement>(null);
