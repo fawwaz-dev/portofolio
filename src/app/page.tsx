@@ -217,67 +217,67 @@ export default function HomePage() {
                 </motion.span>
               </motion.p>
             </motion.div>
-          </div>
 
-          {/* Enhanced Name with Interactive Text */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, delay: 0.9, ease: "easeOut" }}
-            className="relative"
-          >
-            <InteractiveText
-              text="FAWWAZ"
-              className="text-4xl sm:text-6xl md:text-8xl lg:text-[10rem] font-black tracking-tighter leading-none"
-              colors={["#ffffff", "#00ff88", "#00d4ff", "#ff0080"]}
-            />
-            {/* Enhanced Glow Effect */}
+            {/* Enhanced Interactive Name with Glow Effect */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-neon-green/20 via-electric-400/20 to-neon-pink/20 blur-3xl rounded-full"
-              animate={{
-                scale: [1, 1.1, 1],
-                opacity: [0.3, 0.5, 0.3],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-            />
-          </motion.div>
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.2, delay: 0.9, ease: "easeOut" }}
+              className="relative"
+            >
+              <InteractiveText
+                text="FAWWAZ"
+                className="text-4xl sm:text-6xl md:text-8xl lg:text-[10rem] font-black tracking-tighter leading-none"
+                colors={["#ffffff", "#00ff88", "#00d4ff", "#ff0080"]}
+              />
+              {/* Enhanced Glow Effect */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-neon-green/20 via-electric-400/20 to-neon-pink/20 blur-3xl rounded-full"
+                animate={{
+                  scale: [1, 1.1, 1],
+                  opacity: [0.3, 0.5, 0.3],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: "easeInOut",
+                }}
+              />
+            </motion.div>
 
-          {/* Enhanced Tagline with Better Typography */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.1, ease: "easeOut" }}
-            className="relative max-w-4xl mx-auto"
-          >
-            <h2 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-light text-white/90 tracking-wide leading-relaxed">
-              Crafting{" "}
-              <span className="relative inline-block font-mono">
-                <span
-                  className="bg-gradient-to-r from-neon-green via-electric-400 to-neon-blue bg-clip-text text-transparent font-bold animate-neon-flicker"
-                  style={{ textShadow: "0 0 10px currentColor" }}
-                >
-                  DIGITAL_REALITIES
-                </span>
-                <motion.div
-                  className="absolute -inset-2 bg-neon-green/20 blur-xl rounded-full"
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.3, 0.6, 0.3],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Number.POSITIVE_INFINITY,
-                    ease: "easeInOut",
-                  }}
-                />
-              </span>{" "}
-              for the future
-            </h2>
-          </motion.div>
+            {/* Enhanced Tagline with Better Typography */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 1.1, ease: "easeOut" }}
+              className="relative max-w-4xl mx-auto"
+            >
+              <h2 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-light text-white/90 tracking-wide leading-relaxed">
+                Crafting{" "}
+                <span className="relative inline-block font-mono">
+                  <span
+                    className="bg-gradient-to-r from-neon-green via-electric-400 to-neon-blue bg-clip-text text-transparent font-bold animate-neon-flicker"
+                    style={{ textShadow: "0 0 10px currentColor" }}
+                  >
+                    DIGITAL_REALITIES
+                  </span>
+                  <motion.div
+                    className="absolute -inset-2 bg-neon-green/20 blur-xl rounded-full"
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      opacity: [0.3, 0.6, 0.3],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Number.POSITIVE_INFINITY,
+                      ease: "easeInOut",
+                    }}
+                  />
+                </span>{" "}
+                for the future
+              </h2>
+            </motion.div>
+          </div>
 
           {/* Enhanced Description with Better Layout */}
           <motion.div
@@ -345,76 +345,42 @@ export default function HomePage() {
               </CyberButton>
             </motion.div>
           </motion.div>
+        </motion.div>
 
-          {/* Enhanced Stats Grid */}
+        {/* Scroll Indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 2.2 }}
+          className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20"
+        >
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.7, ease: "easeOut" }}
-            className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
+            animate={{ y: [0, 10, 0] }}
+            transition={{
+              duration: 2,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "easeInOut",
+            }}
+            className="flex flex-col items-center text-electric-400/60 hover:text-electric-400 transition-colors cursor-pointer"
+            onClick={() => {
+              document
+                .getElementById("about")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }}
           >
-            {[
-              { label: "YEARS_EXPERIENCE", value: "3+" },
-              { label: "PROJECTS_COMPLETED", value: "50+" },
-              { label: "TECHNOLOGIES", value: "15+" },
-              { label: "HAPPY_CLIENTS", value: "25+" },
-            ].map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{
-                  duration: 0.6,
-                  delay: 1.9 + index * 0.1,
-                  ease: "easeOut",
-                }}
-                className="text-center"
-              >
-                <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-neon-green mb-2">
-                  {stat.value}
-                </div>
-                <div className="text-sm md:text-base text-white/60 font-mono tracking-wider">
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Scroll Indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 2.2 }}
-            className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20"
-          >
+            <span className="text-xs font-mono tracking-wider">
+              SCROLL_DOWN
+            </span>
             <motion.div
               animate={{ y: [0, 10, 0] }}
-              transition={{
-                duration: 2,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-              className="flex flex-col items-center text-electric-400/60 hover:text-electric-400 transition-colors cursor-pointer"
-              onClick={() => {
-                document
-                  .getElementById("about")
-                  ?.scrollIntoView({ behavior: "smooth" });
-              }}
+              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+              className="w-6 h-10 border-2 border-white/40 rounded-full flex justify-center cursor-pointer hover:border-white/60 transition-colors"
             >
-              <span className="text-xs font-mono tracking-wider">
-                SCROLL_DOWN
-              </span>
               <motion.div
-                animate={{ y: [0, 10, 0] }}
+                animate={{ y: [0, 12, 0] }}
                 transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-                className="w-6 h-10 border-2 border-white/40 rounded-full flex justify-center cursor-pointer hover:border-white/60 transition-colors"
-              >
-                <motion.div
-                  animate={{ y: [0, 12, 0] }}
-                  transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-                  className="w-1 h-3 bg-white/60 rounded-full mt-2"
-                />
-              </motion.div>
+                className="w-1 h-3 bg-white/60 rounded-full mt-2"
+              />
             </motion.div>
           </motion.div>
         </motion.div>
